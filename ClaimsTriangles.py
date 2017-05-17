@@ -39,3 +39,13 @@ py_triangle = pd.pivot_table(py_data, index = ["Policy_Year"], columns = ["PY_La
 py_data['cumsum'] = py_data["Total"].groupby(py_data["Policy_Year"]).cumsum()
 
 py_cumu_triangle = pd.pivot_table(py_data, index = ["Policy_Year"], columns = ["PY_Lag"], values = ["cumsum"])
+
+# look at the results
+
+print(py_triangle)
+
+input("Press enter to see next triangle\n")
+
+print(py_cumu_triangle)
+
+input("Press Enter to exit\n")

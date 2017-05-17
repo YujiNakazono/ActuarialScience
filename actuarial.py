@@ -21,6 +21,21 @@ claims = pd.DataFrame(claims)
 claims.isnull().any()
 
 # Extract each of the years for triangle analysis
-claims['Policy_Year'] = [x[-4:] for x in claims['Policy_Effective_Date']]
-claims['Report_Year'] = [x[-4:] for x in claims['Report_Date']]
-claims['Transaction_Year'] = [x[-4:] for x in claims['Transaction_Date']]
+claims['Policy_Year'] = [int(x[-4:]) for x in claims['Policy_Effective_Date']]
+claims['Report_Year'] = [int(x[-4:]) for x in claims['Report_Date']]
+claims['Transaction_Year'] = [int(x[-4:]) for x in claims['Transaction_Date']]
+
+# Calculate the lags using year long periods
+claims['PY_Lag'] = claims['Transaction_Year'] - claims['Policy_Year']
+claims['RY_Lag'] = claims['Transaction_Year'] - claims['Report_Year']
+
+# Sum over the Total value, group by PY_Lag
+py_data = claims['Total'].groupby([claims['Policy_Year'],claims['PY_Lag']]).sum().reset_index()
+
+# Convert to a triangle
+py_triangle = pd.pivot_table(py_data, index = ["Policy_Year"], columns = ["PY_Lag"], values = ["Total"])
+
+# Same traingle, but cumulative
+py_data['cumsum'] = py_data["Total"].groupby(py_data["Policy_Year"]).cumsum()
+
+py_cumu_triangle = pd.pivot_table(py_data, index = ["Policy_Year"], columns = ["PY_Lag"], values = ["cumsum"])

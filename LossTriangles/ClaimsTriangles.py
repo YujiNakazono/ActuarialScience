@@ -8,11 +8,12 @@ Created on Tue May 16 23:20:02 2017
 # packages here
 
 import numpy as np
-import matplotlib as mp
 import pandas as pd
+import matplotlib as mp
+
 
 # Import the claims data
-path = "C:/Users/Ryan/Documents/PythonProjects/Actuarial/ClaimsExample.csv"
+path = "C:/Users/Ryan/Documents/PythonProjects/Actuarial/LossTriangles/ClaimsExample.csv"
 
 claims = pd.read_csv(path, sep = ",")
 claims = pd.DataFrame(claims)

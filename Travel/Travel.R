@@ -48,7 +48,8 @@ ggplot(fromCanada, aes(Year,YearRank, group = Country, color = Country, label = 
   ggtitle("Top 15 Travel Destinations by Canadians") +
   geom_text(data = subset(fromCanada, Year == "2015"), aes(label = Country, x = Year +1.2),
             size =3.5, hjust = 0.60 ) +
-  scale_color_manual(values=colors) 
+  scale_color_manual(values=colors)  +
+  theme(panel.background = element_blank())
 
 # Look for the most common countries
 common <- fromCanada %>%
@@ -103,6 +104,26 @@ ggplot(Nightsnew, aes(x = Year, y = Nights,group=Country,fill=Country)) +
   geom_area(stat="identity",position = "fill") +
   geom_line(aes(y = Nights),position="fill") +
   scale_fill_manual(values=colors)
+
+# Average nights analysis
+Nightsnew2 <- fromCanada %>%
+  mutate(av_nights = Nights/Visits)
+
+# import flight costs
+flights <- read.xlsx("Flights.xlsx")
+
+# For just 2015
+nights2015 <-nights2015[order(nights2015$av_nights, decreasing = TRUE),]
+nights2015$Country <- factor(nights2015$Country, levels = nights2015$Country)
+ggplot(nights2015, aes(x = Country, y = av_nights)) +
+  geom_bar(stat = "identity") +
+  theme_hc() +
+  coord_flip() +
+  geom_text(data = flights, mapping = aes(y = 5, x = Country, label = paste("$",Flight_Cost,sep = ""), color = "white", fontface = "bold")) +
+  ggtitle("Average Nights Spent While Travelling, Canadians 2015, With $CDN Flight Cost") +
+  theme(legend.position="none") +
+  ylab("Average Nights")
+  
 
 # Spent analysis
 

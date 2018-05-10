@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Apr  5 11:23:00 2018
+
+@author: rwilkins
+"""
+    
+def data():
+    
+    import os
+    import pandas as pd
+
+    os.chdir("C:\Projects\ActTraingles")
+
+    f = "TriExp.csv"
+    tri  = pd.read_csv(f)
+    
+    return(tri)
+    
+if __name__ == "__main__":
+    pass
+
+def myfunc(z,y):
+    return z +y

@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu May 10 10:37:16 2018
+
+@author: rwilkins
+"""
+
+import ActTriangles as at
+
+def chainLadder(tri):
+    """ Get an aggregate incurred at each development period """
+    allDevs = []
+    devs = sorted(set(tri.tabular["start"]))
+    
+    def getDevList(devPeriod,column):
+        return tri.tabular.loc[(tri.tabular["start"] == devPeriod)][column]
+    
+    for j in range(len(devs)-1):
+        
+        i = devs[j]
+        k = devs[j+1]
+        
+        totalDevInPeriod = sum(getDevList(i,"value"))
+        totalDevInNextPeriod = sum(getDevList(k,"value"))
+        
+        latestDiag = max(getDevList(i,"period"))
+        mostRecentDev = tri.tabular.loc[(tri.tabular["start"] == i) & (tri.tabular["period"] == latestDiag)]["value"]
+        
+        #mySumNextDev = sum(tri.tabular.loc[(tri.tabular["start"] == i+1)]["value"])
+        nextEntry = dict({"DevPeriod":i, "CumuDevAtT":totalDevInPeriod, "CumuDevAtTPlus1": totalDevInNextPeriod, "LatestPeriodDev": float(mostRecentDev)})
+        allDevs.append(nextEntry)
+
+    
+    return allDevs
+    
+    
+    
+    
+def main():
+    """ Function testing below"""
+    testTri = at.loadTest()
+    chainLadder(testTri)
+    testTri.triangle_view
+
+    
+    
+    
+
+
+if __name__ == '__main__':
+    main()
